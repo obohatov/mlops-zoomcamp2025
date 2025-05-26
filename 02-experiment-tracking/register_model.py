@@ -41,40 +41,39 @@ def train_and_log_model(data_path, params):
         test_rmse = mean_squared_error(y_test, rf.predict(X_test), squared=False)
         mlflow.log_metric("test_rmse", test_rmse)
 
-
 @click.command()
-@click.option(
-    "--data_path",
-    default="./output",
-    help="Location where the processed NYC taxi trip data was saved"
-)
-@click.option(
-    "--top_n",
-    default=5,
-    type=int,
-    help="Number of top models that need to be evaluated to decide which one to promote"
-)
+@click.option("--data_path", default="./output", help="Location where the processed NYC taxi trip data was saved")
+@click.option("--top_n", default=5, type=int, help="Number of top models to evaluate")
 def run_register_model(data_path: str, top_n: int):
 
     client = MlflowClient()
 
-    # Retrieve the top_n model runs and log the models
     experiment = client.get_experiment_by_name(HPO_EXPERIMENT_NAME)
     runs = client.search_runs(
-        experiment_ids=experiment.experiment_id,
+        experiment_ids=[experiment.experiment_id],
         run_view_type=ViewType.ACTIVE_ONLY,
         max_results=top_n,
         order_by=["metrics.rmse ASC"]
     )
+
     for run in runs:
         train_and_log_model(data_path=data_path, params=run.data.params)
 
-    # Select the model with the lowest test RMSE
     experiment = client.get_experiment_by_name(EXPERIMENT_NAME)
-    # best_run = client.search_runs( ...  )[0]
+    best_run = client.search_runs(
+        experiment_ids=[experiment.experiment_id],
+        run_view_type=ViewType.ACTIVE_ONLY,
+        max_results=1,
+        order_by=["metrics.test_rmse ASC"]
+    )[0]
 
-    # Register the best model
-    # mlflow.register_model( ... )
+    run_id = best_run.info.run_id
+    model_uri = f"runs:/{run_id}/model"
+
+    mlflow.register_model(
+        model_uri=model_uri,
+        name="random-forest-regressor-prod"
+    )
 
 
 if __name__ == '__main__':
