@@ -1,0 +1,15 @@
+artifact_uri: file:///workspaces/mlops-zoomcamp2025/02-experiment-tracking/mlruns/0/d39bf2d994a04ae486784720f8b05fec/artifacts
+end_time: 1748195491673
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d39bf2d994a04ae486784720f8b05fec
+run_name: bedecked-carp-586
+run_uuid: d39bf2d994a04ae486784720f8b05fec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748195468734
+status: 3
+tags: []
+user_id: codespace

@@ -1,0 +1,15 @@
+artifact_uri: file:///workspaces/mlops-zoomcamp2025/02-experiment-tracking/mlruns/0/e62d11a3f39e4252a37462d952350d91/artifacts
+end_time: 1748194917319
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e62d11a3f39e4252a37462d952350d91
+run_name: chill-lark-192
+run_uuid: e62d11a3f39e4252a37462d952350d91
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748194899764
+status: 3
+tags: []
+user_id: codespace

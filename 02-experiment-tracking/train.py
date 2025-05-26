@@ -1,6 +1,9 @@
 import os
 import pickle
 import click
+import mlflow
+import mlflow.sklearn  # Ensure autologging works
+from mlflow.models.signature import infer_signature
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
@@ -19,14 +22,31 @@ def load_pickle(filename: str):
 )
 def run_train(data_path: str):
 
+    # Enable autologging
+    mlflow.sklearn.autolog()
+
     X_train, y_train = load_pickle(os.path.join(data_path, "train.pkl"))
     X_val, y_val = load_pickle(os.path.join(data_path, "val.pkl"))
 
-    rf = RandomForestRegressor(max_depth=10, random_state=0)
-    rf.fit(X_train, y_train)
-    y_pred = rf.predict(X_val)
+    with mlflow.start_run():
+        rf = RandomForestRegressor(max_depth=10, random_state=0)
+        rf.fit(X_train, y_train)
 
-    rmse = mean_squared_error(y_val, y_pred, squared=False)
+        y_pred = rf.predict(X_val)
+        rmse = mean_squared_error(y_val, y_pred, squared=False)
+
+        # Optionally log RMSE manually
+        mlflow.log_metric("rmse", rmse)
+
+        print(f"RMSE: {rmse}")
+
+        signature = infer_signature(X_val, y_pred)  
+        mlflow.sklearn.log_model(
+            rf,
+            artifact_path="model",
+            signature=signature,
+            input_example=X_val[:5] 
+        )
 
 
 if __name__ == '__main__':

@@ -1,0 +1,15 @@
+artifact_uri: file:///workspaces/mlops-zoomcamp2025/02-experiment-tracking/mlruns/0/ac91d2888b43418a9538db697f5711b3/artifacts
+end_time: 1748195910562
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ac91d2888b43418a9538db697f5711b3
+run_name: fun-steed-582
+run_uuid: ac91d2888b43418a9538db697f5711b3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748195889504
+status: 3
+tags: []
+user_id: codespace
